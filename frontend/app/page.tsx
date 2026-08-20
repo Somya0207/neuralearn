@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar";
+import HowItWorks from "./components/HowItWorks";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
           animates them into a personal video lecture.
         </p>
       </section>
+      <HowItWorks />
     </main>
   );
 }

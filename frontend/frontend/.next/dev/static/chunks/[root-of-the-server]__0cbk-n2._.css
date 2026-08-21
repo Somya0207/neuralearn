@@ -139,6 +139,7 @@
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
+      --tw-space-y-reverse: 0;
       --tw-border-style: solid;
       --tw-gradient-position: initial;
       --tw-gradient-from: #0000;
@@ -205,8 +206,10 @@
     --tracking-tight: -.025em;
     --tracking-widest: .1em;
     --leading-tight: 1.25;
+    --leading-snug: 1.375;
     --radius-md: .375rem;
     --radius-lg: .5rem;
+    --radius-xl: .75rem;
     --radius-2xl: 1rem;
     --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
     --blur-md: 12px;
@@ -505,6 +508,10 @@
     margin-bottom: calc(var(--spacing) * 14);
   }
 
+  .ml-auto {
+    margin-left: auto;
+  }
+
   .block {
     display: block;
   }
@@ -565,6 +572,10 @@
     max-width: var(--container-5xl);
   }
 
+  .max-w-\[88\%\] {
+    max-width: 88%;
+  }
+
   .max-w-lg {
     max-width: var(--container-lg);
   }
@@ -573,12 +584,20 @@
     max-width: var(--container-md);
   }
 
+  .flex-1 {
+    flex: 1;
+  }
+
   .animate-pulse {
     animation: var(--animate-pulse);
   }
 
   .grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-cols-\[2\.2fr_1fr\] {
+    grid-template-columns: 2.2fr 1fr;
   }
 
   .flex-col {
@@ -617,8 +636,18 @@
     gap: 1px;
   }
 
+  :where(.space-y-3 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
+  }
+
   .overflow-hidden {
     overflow: hidden;
+  }
+
+  .overflow-y-auto {
+    overflow-y: auto;
   }
 
   .rounded-2xl {
@@ -637,9 +666,18 @@
     border-radius: var(--radius-md);
   }
 
+  .rounded-xl {
+    border-radius: var(--radius-xl);
+  }
+
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
   }
 
   .border-b {
@@ -647,8 +685,22 @@
     border-bottom-width: 1px;
   }
 
+  .border-b-2 {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 2px;
+  }
+
+  .border-l {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 1px;
+  }
+
   .border-\[\#262B47\] {
     border-color: #262b47;
+  }
+
+  .border-\[\#E8A33D\] {
+    border-color: #e8a33d;
   }
 
   .bg-\[\#0B0E1A\] {
@@ -674,6 +726,10 @@
 
   .bg-\[\#12162A\] {
     background-color: #12162a;
+  }
+
+  .bg-\[\#E8A33D33\] {
+    background-color: #e8a33d33;
   }
 
   .bg-\[\#E8A33D\] {
@@ -703,12 +759,24 @@
     padding: var(--spacing);
   }
 
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
+  }
+
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+  }
+
   .p-7 {
     padding: calc(var(--spacing) * 7);
   }
 
   .p-8 {
     padding: calc(var(--spacing) * 8);
+  }
+
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
   }
 
   .px-3\.5 {
@@ -797,6 +865,11 @@
     font-size: 13px;
   }
 
+  .leading-snug {
+    --tw-leading: var(--leading-snug);
+    line-height: var(--leading-snug);
+  }
+
   .leading-tight {
     --tw-leading: var(--leading-tight);
     line-height: var(--leading-tight);
@@ -842,6 +915,10 @@
     color: #e9e6f2;
   }
 
+  .text-white {
+    color: var(--color-white);
+  }
+
   .uppercase {
     text-transform: uppercase;
   }
@@ -870,6 +947,11 @@
     backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
   }
 
+  .outline-none {
+    --tw-outline-style: none;
+    outline-style: none;
+  }
+
   @media (hover: hover) {
     .hover\:text-white:hover {
       color: var(--color-white);
@@ -893,6 +975,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 
 @property --tw-border-style {

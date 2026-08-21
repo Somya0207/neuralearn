@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import HowItWorks from "./components/HowItWorks";
 import Features from "./components/Features";
 import PlayerPreview from "./components/PlayerPreview";
+import Dashboard from "./components/Dashboard";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       <HowItWorks />
       <Features />
       <PlayerPreview />
+      <Dashboard />
     </main>
   );
 }

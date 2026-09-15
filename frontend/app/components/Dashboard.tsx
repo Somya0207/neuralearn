@@ -1,3 +1,15 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
+interface Lecture {
+  id: number;
+  title: string;
+  topic: string;
+  duration: number;
+  difficulty: string;
+}
+
 const mastery = [
   { topic: "Arrays", percent: 88 },
   { topic: "Recursion", percent: 54 },
@@ -5,13 +17,19 @@ const mastery = [
   { topic: "Dynamic Programming", percent: 12 },
 ];
 
-const lectures = [
-  { title: "Recursion: Base Cases & Stack Frames", meta: "Data Structures · 11 min", tag: "RECOMMENDED" },
-  { title: "Graph Traversal: BFS vs DFS", meta: "Data Structures · 14 min", tag: "CONTINUE" },
-  { title: "Intro to Dynamic Programming", meta: "Algorithms · 9 min", tag: "NEW" },
-];
-
 export default function Dashboard() {
+  const [lectures, setLectures] = useState<Lecture[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/lectures")
+      .then((res) => res.json())
+      .then((data) => {
+        setLectures(data);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <section className="mx-auto max-w-5xl px-8 py-24">
       <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#6C63FF]">
@@ -40,16 +58,17 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-3 gap-4">
+          {loading && <p className="text-sm text-[#8B8FA8]">Loading lectures...</p>}
           {lectures.map((lec) => (
-            <div key={lec.title} className="overflow-hidden rounded-xl border border-[#262B47] bg-[#161B32]">
+            <div key={lec.id} className="overflow-hidden rounded-xl border border-[#262B47] bg-[#161B32]">
               <div className="relative aspect-[16/10] bg-gradient-to-br from-[#6C63FF4D] to-[#E8A33D33]">
                 <span className="absolute left-2.5 top-2.5 rounded-md bg-black/40 px-2 py-1 text-[10px] font-bold tracking-wide text-white">
-                  {lec.tag}
+                  {lec.difficulty.toUpperCase()}
                 </span>
               </div>
               <div className="p-3.5">
                 <p className="mb-1.5 text-[13.5px] font-semibold">{lec.title}</p>
-                <p className="text-xs text-[#8B8FA8]">{lec.meta}</p>
+                <p className="text-xs text-[#8B8FA8]">{lec.topic} · {lec.duration} min</p>
               </div>
             </div>
           ))}

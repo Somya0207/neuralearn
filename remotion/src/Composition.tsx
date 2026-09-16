@@ -1,21 +1,22 @@
 import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
+import { z } from "zod";
 
-const codeLines = [
-  { code: "def binary_search(arr, target):", note: "Define the function with array and target" },
-  { code: "    lo, hi = 0, len(arr) - 1", note: "Set search boundaries" },
-  { code: "    while lo <= hi:", note: "Keep searching while a range exists" },
-  { code: "        mid = (lo + hi) // 2", note: "Find the middle point" },
-  { code: "        if arr[mid] == target:", note: "Check if we found it" },
-  { code: "            return mid", note: "Found it — return the index" },
-];
+export const compositionSchema = z.object({
+  lines: z.array(
+    z.object({
+      code: z.string(),
+      note: z.string(),
+    })
+  ),
+});
 
-export const MyComposition = () => {
+export const MyComposition = ({ lines }: z.infer<typeof compositionSchema>) => {
   const frame = useCurrentFrame();
-  const activeLine = Math.min(Math.floor(frame / 25), codeLines.length - 1);
+  const activeLine = Math.min(Math.floor(frame / 25), lines.length - 1);
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#0B0E1A", padding: 80, justifyContent: "center" }}>
-      {codeLines.map((line, i) => {
+      {lines.map((line, i) => {
         const startFrame = i * 15;
         const opacity = interpolate(frame, [startFrame, startFrame + 15], [0, 1], {
           extrapolateLeft: "clamp",
@@ -35,7 +36,6 @@ export const MyComposition = () => {
               padding: "8px 16px",
               borderRadius: 8,
               marginBottom: 8,
-              transition: "none",
             }}
           >
             {line.code}
@@ -43,7 +43,7 @@ export const MyComposition = () => {
         );
       })}
 
-      {codeLines[activeLine] && (
+      {lines[activeLine] && (
         <div
           style={{
             position: "absolute",
@@ -54,7 +54,7 @@ export const MyComposition = () => {
             color: "#8B8FA8",
           }}
         >
-          {codeLines[activeLine].note}
+          {lines[activeLine].note}
         </div>
       )}
     </AbsoluteFill>

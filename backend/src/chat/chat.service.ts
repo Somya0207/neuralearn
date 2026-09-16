@@ -21,8 +21,7 @@ export class ChatService {
       }),
     });
 
-    const data = await response.json();
-    console.log('GROQ RESPONSE:', JSON.stringify(data));
+        const data = await response.json();
     return data.choices[0].message.content;
   }
 }

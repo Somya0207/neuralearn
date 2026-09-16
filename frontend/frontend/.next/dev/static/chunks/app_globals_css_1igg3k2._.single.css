@@ -504,6 +504,10 @@
     max-width: var(--container-sm);
   }
 
+  .min-w-0 {
+    min-width: 0;
+  }
+
   .flex-1 {
     flex: 1;
   }

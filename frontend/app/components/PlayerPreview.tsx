@@ -17,10 +17,22 @@ export default function PlayerPreview() {
   const [messages, setMessages] = useState(initialMessages);
   const [draft, setDraft] = useState("");
 
-  function sendMessage() {
-    if (draft.trim() === "") return; // ignore empty sends
-    setMessages([...messages, { from: "user", text: draft }]);
-    setDraft(""); // clear the input after sending
+  async function sendMessage() {
+    if (draft.trim() === "") return;
+
+    const userMessage = { from: "user", text: draft };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    setDraft("");
+
+    const res = await fetch("http://localhost:3001/chat/tutor", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: draft, lectureContext: "Recursion basics" }),
+    });
+    const data = await res.json();
+
+    setMessages([...updatedMessages, { from: "tutor", text: data.reply }]);
   }
 
   return (
@@ -51,11 +63,11 @@ export default function PlayerPreview() {
         </div>
 
         <div className="grid grid-cols-[2.2fr_1fr]">
-          <div className="flex aspect-video items-center justify-center bg-[radial-gradient(circle_at_30%_30%,#6C63FF33,#161B32_60%)]">
+          <div className="flex min-w-0  aspect-video items-center justify-center bg-[radial-gradient(circle_at_30%_30%,#6C63FF33,#161B32_60%)]">
             <div className="h-20 w-20 animate-pulse rounded-full bg-gradient-to-br from-[#E8A33D] to-[#6C63FF]" />
           </div>
 
-          <div className="flex flex-col border-l border-[#262B47]">
+          <div className="flex min-w-0 flex-col border-l border-[#262B47]">
             <div className="flex border-b border-[#262B47]">
               {sideTabs.map((tab) => (
                 <button
@@ -72,7 +84,7 @@ export default function PlayerPreview() {
               ))}
             </div>
 
-            <div className="flex-1 space-y-3 overflow-y-auto p-4">
+            <div className="min-w-0 flex-1 space-y-3 overflow-y-auto p-4">
               {messages.map((msg, i) => (
                 <div
                   key={i}

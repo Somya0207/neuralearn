@@ -254,16 +254,36 @@ function PlayerPreview() {
     const [activeSideTab, setActiveSideTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("AI Tutor");
     const [messages, setMessages] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initialMessages);
     const [draft, setDraft] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    function sendMessage() {
-        if (draft.trim() === "") return; // ignore empty sends
-        setMessages([
+    async function sendMessage() {
+        if (draft.trim() === "") return;
+        const userMessage = {
+            from: "user",
+            text: draft
+        };
+        const updatedMessages = [
             ...messages,
+            userMessage
+        ];
+        setMessages(updatedMessages);
+        setDraft("");
+        const res = await fetch("http://localhost:3001/chat/tutor", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: draft,
+                lectureContext: "Recursion basics"
+            })
+        });
+        const data = await res.json();
+        setMessages([
+            ...updatedMessages,
             {
-                from: "user",
-                text: draft
+                from: "tutor",
+                text: data.reply
             }
         ]);
-        setDraft(""); // clear the input after sending
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         className: "mx-auto max-w-5xl px-8 py-24",
@@ -273,7 +293,7 @@ function PlayerPreview() {
                 children: "The Lecture Player"
             }, void 0, false, {
                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                lineNumber: 28,
+                lineNumber: 40,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -281,7 +301,7 @@ function PlayerPreview() {
                 children: "Where the actual learning happens"
             }, void 0, false, {
                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                lineNumber: 31,
+                lineNumber: 43,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -298,12 +318,12 @@ function PlayerPreview() {
                                         children: tab
                                     }, tab, false, {
                                         fileName: "[project]/app/components/PlayerPreview.tsx",
-                                        lineNumber: 39,
+                                        lineNumber: 51,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                                lineNumber: 37,
+                                lineNumber: 49,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -314,13 +334,13 @@ function PlayerPreview() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                                lineNumber: 50,
+                                lineNumber: 62,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/PlayerPreview.tsx",
-                        lineNumber: 36,
+                        lineNumber: 48,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -332,16 +352,16 @@ function PlayerPreview() {
                                     className: "h-20 w-20 animate-pulse rounded-full bg-gradient-to-br from-[#E8A33D] to-[#6C63FF]"
                                 }, void 0, false, {
                                     fileName: "[project]/app/components/PlayerPreview.tsx",
-                                    lineNumber: 55,
+                                    lineNumber: 67,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                                lineNumber: 54,
+                                lineNumber: 66,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex flex-col border-l border-[#262B47]",
+                                className: "flex min-w-0 flex-col border-l border-[#262B47]",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex border-b border-[#262B47]",
@@ -351,27 +371,27 @@ function PlayerPreview() {
                                                 children: tab
                                             }, tab, false, {
                                                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                                                lineNumber: 61,
+                                                lineNumber: 73,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/PlayerPreview.tsx",
-                                        lineNumber: 59,
+                                        lineNumber: 71,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "flex-1 space-y-3 overflow-y-auto p-4",
+                                        className: "min-w-0 flex-1 space-y-3 overflow-y-auto p-4",
                                         children: messages.map((msg, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: `max-w-[88%] rounded-xl px-3 py-2 text-[13px] leading-snug ${msg.from === "tutor" ? "bg-[#12162A] border border-[#262B47]" : "ml-auto bg-[#E8A33D33]"}`,
                                                 children: msg.text
                                             }, i, false, {
                                                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                                                lineNumber: 77,
+                                                lineNumber: 89,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/PlayerPreview.tsx",
-                                        lineNumber: 75,
+                                        lineNumber: 87,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -385,36 +405,36 @@ function PlayerPreview() {
                                             className: "flex-1 rounded-lg border border-[#262B47] bg-[#12162A] px-3 py-2 text-[13px] text-white outline-none"
                                         }, void 0, false, {
                                             fileName: "[project]/app/components/PlayerPreview.tsx",
-                                            lineNumber: 91,
+                                            lineNumber: 103,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/PlayerPreview.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 102,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                                lineNumber: 58,
+                                lineNumber: 70,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/PlayerPreview.tsx",
-                        lineNumber: 53,
+                        lineNumber: 65,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/components/PlayerPreview.tsx",
-                lineNumber: 35,
+                lineNumber: 47,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/components/PlayerPreview.tsx",
-        lineNumber: 27,
+        lineNumber: 39,
         columnNumber: 5
     }, this);
 }

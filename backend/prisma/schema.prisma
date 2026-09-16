@@ -28,3 +28,21 @@ model User {
   name      String
   createdAt DateTime @default(now())
 }
+
+model Quiz {
+  id            Int      @id @default(autoincrement())
+  topic         String
+  question      String
+  options       String[]
+  correctAnswer Int
+}
+
+model Mastery {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  topic       String
+  score       Int      @default(0)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, topic])
+}

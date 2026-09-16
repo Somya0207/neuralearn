@@ -5,9 +5,10 @@ import { LecturesModule } from './lectures/lectures.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { ChatModule } from './chat/chat.module.js';
 import { VideoModule } from './video/video.module.js';
+import { QuizModule } from './quiz/quiz.module.js';
 
 @Module({
-  imports: [LecturesModule, AuthModule, ChatModule, VideoModule],
+  imports: [LecturesModule, AuthModule, ChatModule, VideoModule, QuizModule],
   controllers: [AppController],
   providers: [AppService],
 })

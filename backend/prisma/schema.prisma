@@ -46,3 +46,10 @@ model Mastery {
 
   @@unique([userId, topic])
 }
+
+model Document {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+}

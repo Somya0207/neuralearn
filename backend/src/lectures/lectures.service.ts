@@ -7,4 +7,7 @@ export class LecturesService {
   async findAll() {
     return prisma.lecture.findMany();
   }
+   async findOne(id: number) {
+    return prisma.lecture.findUnique({ where: { id } });
+  } 
 }

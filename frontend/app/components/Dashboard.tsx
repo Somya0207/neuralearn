@@ -10,15 +10,16 @@ interface Lecture {
   difficulty: string;
 }
 
-const mastery = [
-  { topic: "Arrays", percent: 88 },
-  { topic: "Recursion", percent: 54 },
-  { topic: "Graphs", percent: 31 },
-  { topic: "Dynamic Programming", percent: 12 },
-];
+interface MasteryEntry {
+  topic: string;
+  score: number;
+}
+
+const allTopics = ["Arrays", "Recursion", "Graphs", "Dynamic Programming"];
 
 export default function Dashboard() {
   const [lectures, setLectures] = useState<Lecture[]>([]);
+  const [mastery, setMastery] = useState<MasteryEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +29,21 @@ export default function Dashboard() {
         setLectures(data);
         setLoading(false);
       });
+
+    const userData = localStorage.getItem("user");
+    const userId = userData ? JSON.parse(userData).id : null;
+
+    if (userId) {
+      fetch(`http://localhost:3001/quiz/mastery/${userId}`)
+        .then((res) => res.json())
+        .then((data) => setMastery(data));
+    }
   }, []);
+
+  function getScoreForTopic(topic: string) {
+    const found = mastery.find((m) => m.topic === topic);
+    return found ? found.score : 0;
+  }
 
   return (
     <section className="mx-auto max-w-5xl px-8 py-24">
@@ -44,24 +59,29 @@ export default function Dashboard() {
           <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-[#8B8FA8]">
             Topic mastery
           </p>
-          {mastery.map((m) => (
-            <div key={m.topic} className="mb-4 flex items-center justify-between last:mb-0">
-              <span className="text-[13px] font-medium">{m.topic}</span>
-              <div className="h-1.5 w-24 overflow-hidden rounded-full bg-[#262B47]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#6C63FF] to-[#E8A33D]"
-                  style={{ width: `${m.percent}%` }}
-                />
+          {allTopics.map((topic) => {
+            const score = getScoreForTopic(topic);
+            return (
+              <div key={topic} className="mb-4 flex items-center justify-between last:mb-0">
+                <span className="text-[13px] font-medium">{topic}</span>
+                <div className="h-1.5 w-24 overflow-hidden rounded-full bg-[#262B47]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#6C63FF] to-[#E8A33D]"
+                    style={{ width: `${score}%` }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+          <a href="/quiz?topic=Recursion" className="mt-4 block rounded-lg bg-[#E8A33D1A] py-2 text-center text-xs font-semibold text-[#E8A33D] hover:bg-[#E8A33D33]">
+          Take Recursion Quiz →
+          </a>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
           {loading && <p className="text-sm text-[#8B8FA8]">Loading lectures...</p>}
           {lectures.map((lec) => (
-            <div key={lec.id} className="overflow-hidden rounded-xl border border-[#262B47] bg-[#161B32]">
-              <div className="relative aspect-[16/10] bg-gradient-to-br from-[#6C63FF4D] to-[#E8A33D33]">
+            <a key={lec.id} href={`/lecture/${lec.id}`} className="overflow-hidden rounded-xl border border-[#262B47] bg-[#161B32] transition hover:border-[#E8A33D]">              <div className="relative aspect-[16/10] bg-gradient-to-br from-[#6C63FF4D] to-[#E8A33D33]">
                 <span className="absolute left-2.5 top-2.5 rounded-md bg-black/40 px-2 py-1 text-[10px] font-bold tracking-wide text-white">
                   {lec.difficulty.toUpperCase()}
                 </span>
@@ -70,7 +90,7 @@ export default function Dashboard() {
                 <p className="mb-1.5 text-[13.5px] font-semibold">{lec.title}</p>
                 <p className="text-xs text-[#8B8FA8]">{lec.topic} · {lec.duration} min</p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

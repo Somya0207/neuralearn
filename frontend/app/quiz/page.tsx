@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface Question {
   id: number;
@@ -13,7 +14,8 @@ export default function Quiz() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<number[]>([]);
   const [result, setResult] = useState<any>(null);
-  const topic = "Recursion";
+  const searchParams = useSearchParams();
+  const topic = searchParams.get("topic") || "Recursion";
 
   useEffect(() => {
     fetch(`http://localhost:3001/quiz/${topic}`)
@@ -82,10 +84,12 @@ export default function Quiz() {
             </div>
           </div>
         ))}
-
+        {questions.length === 0 && (
+          <p className="mb-8 text-sm text-[#8B8FA8]">No quiz questions available for this topic yet.</p>
+        )}
         <button
           onClick={submitQuiz}
-          disabled={answers.includes(-1)}
+          disabled={questions.length === 0 || answers.includes(-1)}
           className="w-full rounded-lg bg-[#E8A33D] py-3 text-sm font-semibold text-[#14172B] disabled:opacity-40"
         >
           Submit Quiz

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Question {
   id: number;
@@ -16,6 +16,12 @@ export default function Quiz() {
   const [result, setResult] = useState<any>(null);
   const searchParams = useSearchParams();
   const topic = searchParams.get("topic") || "Recursion";
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) router.push("/login");
+  }, []);
 
   useEffect(() => {
     fetch(`http://localhost:3001/quiz/${topic}`)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PlayerPreview from "../../components/PlayerPreview";
 
 interface Lecture {
@@ -14,7 +14,13 @@ interface Lecture {
 
 export default function LectureDetail() {
   const { id } = useParams();
+  const router = useRouter();
   const [lecture, setLecture] = useState<Lecture | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) router.push("/login");
+  }, []);
 
   useEffect(() => {
     fetch(`http://localhost:3001/lectures/${id}`)

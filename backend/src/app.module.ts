@@ -7,9 +7,10 @@ import { ChatModule } from './chat/chat.module.js';
 import { VideoModule } from './video/video.module.js';
 import { QuizModule } from './quiz/quiz.module.js';
 import { DocumentsModule } from './documents/documents.module.js';
+import { RecommendationsModule } from './recommendations/recommendations.module.js';
 
 @Module({
-  imports: [LecturesModule, AuthModule, ChatModule, VideoModule, QuizModule, DocumentsModule],
+  imports: [LecturesModule, AuthModule, ChatModule, VideoModule, QuizModule, DocumentsModule, RecommendationsModule],
   controllers: [AppController],
   providers: [AppService],
 })

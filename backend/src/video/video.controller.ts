@@ -7,7 +7,6 @@ export class VideoController {
 
   @Post('render')
   async render(@Body() body: { lines: { code: string; note: string }[] }) {
-    const outputPath = await this.videoService.renderLecture(body.lines);
-    return { message: 'Video rendered', path: outputPath };
+    const outputPath = await this.videoService.renderLecture(body.lines);    return { message: 'Video rendered', path: outputPath };
   }
 }

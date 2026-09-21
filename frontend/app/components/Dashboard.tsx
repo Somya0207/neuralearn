@@ -27,6 +27,8 @@ export default function Dashboard() {
   const [mastery, setMastery] = useState<MasteryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState("all");
 
   useEffect(() => {
     fetch("http://localhost:3001/lectures")
@@ -54,6 +56,14 @@ export default function Dashboard() {
     const found = mastery.find((m) => m.topic === topic);
     return found ? found.score : 0;
   }
+
+  const filteredLectures = lectures.filter((lec) => {
+    const matchesSearch =
+      lec.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lec.topic.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDifficulty = difficultyFilter === "all" || lec.difficulty === difficultyFilter;
+    return matchesSearch && matchesDifficulty;
+  });
 
   return (
     <section className="mx-auto max-w-5xl px-8 py-24">
@@ -91,25 +101,50 @@ export default function Dashboard() {
           </a>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          {loading && <p className="text-sm text-[#8B8FA8]">Loading lectures...</p>}
-          {lectures.map((lec) => (
-            <a
-              key={lec.id}
-              href={`/lecture/${lec.id}`}
-              className="overflow-hidden rounded-xl border border-[#262B47] bg-[#161B32] transition hover:border-[#E8A33D]"
+        <div>
+          <div className="mb-4 flex gap-3">
+            <input
+              type="text"
+              placeholder="Search lectures..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 rounded-lg border border-[#262B47] bg-[#161B32] px-3 py-2 text-sm outline-none placeholder:text-[#8B8FA8]"
+            />
+            <select
+              value={difficultyFilter}
+              onChange={(e) => setDifficultyFilter(e.target.value)}
+              className="rounded-lg border border-[#262B47] bg-[#161B32] px-3 py-2 text-sm text-[#E9E6F2] outline-none"
             >
-              <div className="relative aspect-[16/10] bg-gradient-to-br from-[#6C63FF4D] to-[#E8A33D33]">
-                <span className="absolute left-2.5 top-2.5 rounded-md bg-black/40 px-2 py-1 text-[10px] font-bold tracking-wide text-white">
-                  {lec.difficulty.toUpperCase()}
-                </span>
-              </div>
-              <div className="p-3.5">
-                <p className="mb-1.5 text-[13.5px] font-semibold">{lec.title}</p>
-                <p className="text-xs text-[#8B8FA8]">{lec.topic} · {lec.duration} min</p>
-              </div>
-            </a>
-          ))}
+              <option value="all">All levels</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            {loading && <p className="text-sm text-[#8B8FA8]">Loading lectures...</p>}
+            {!loading && filteredLectures.length === 0 && (
+              <p className="col-span-3 text-sm text-[#8B8FA8]">No lectures match your search.</p>
+            )}
+            {filteredLectures.map((lec) => (
+              <a
+                key={lec.id}
+                href={`/lecture/${lec.id}`}
+                className="overflow-hidden rounded-xl border border-[#262B47] bg-[#161B32] transition hover:border-[#E8A33D]"
+              >
+                <div className="relative aspect-[16/10] bg-gradient-to-br from-[#6C63FF4D] to-[#E8A33D33]">
+                  <span className="absolute left-2.5 top-2.5 rounded-md bg-black/40 px-2 py-1 text-[10px] font-bold tracking-wide text-white">
+                    {lec.difficulty.toUpperCase()}
+                  </span>
+                </div>
+                <div className="p-3.5">
+                  <p className="mb-1.5 text-[13.5px] font-semibold">{lec.title}</p>
+                  <p className="text-xs text-[#8B8FA8]">{lec.topic} · {lec.duration} min</p>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 

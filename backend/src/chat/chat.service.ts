@@ -49,4 +49,28 @@ export class ChatService {
     const data = await response.json();
     return data.choices[0].message.content;
   }
+  async generateNotes(lectureTitle: string, lectureTopic: string) {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-120b',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a CS tutor writing concise study notes. Use short bullet points, bold key terms, keep it under 150 words.',
+          },
+          {
+            role: 'user',
+            content: `Write study notes for a lecture titled "${lectureTitle}" on the topic of ${lectureTopic}.`,
+          },
+        ],
+      }),
+    });
+    const data = await response.json();
+    return data.choices[0].message.content;
+  }
 }

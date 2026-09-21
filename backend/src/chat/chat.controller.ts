@@ -15,6 +15,12 @@ export class ChatController {
     return { reply };
   }
 
+  @Post('notes')
+  async generateNotes(@Body() body: { title: string; topic: string }) {
+    const notes = await this.chatService.generateNotes(body.title, body.topic);
+    return { notes };
+  }
+
   @Post('document')
   async askAboutDocument(@Body() body: { message: string; documentId: number }) {
     const doc = await this.documentsService.getDocument(body.documentId);

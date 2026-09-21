@@ -8,9 +8,10 @@ import { VideoModule } from './video/video.module.js';
 import { QuizModule } from './quiz/quiz.module.js';
 import { DocumentsModule } from './documents/documents.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
+import { SandboxModule } from './sandbox/sandbox.module.js';
 
 @Module({
-  imports: [LecturesModule, AuthModule, ChatModule, VideoModule, QuizModule, DocumentsModule, RecommendationsModule],
+  imports: [LecturesModule, AuthModule, ChatModule, VideoModule, QuizModule, DocumentsModule, RecommendationsModule, SandboxModule],
   controllers: [AppController],
   providers: [AppService],
 })

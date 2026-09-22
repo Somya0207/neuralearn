@@ -15,6 +15,9 @@ export default function PdfTutor() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState("");
   const [asking, setAsking] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const [generatingVideo, setGeneratingVideo] = useState(false);
+  const [videoStatus, setVideoStatus] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -61,6 +64,22 @@ export default function PdfTutor() {
     setAsking(false);
   }
 
+  async function generateVideo() {
+    if (!documentId) return;
+    setGeneratingVideo(true);
+    setVideoStatus("");
+
+    const res = await fetch("http://localhost:3001/video/from-document", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ documentId, language }),
+    });
+    const data = await res.json();
+
+    setVideoStatus(`Video generated! Saved at: ${data.path}`);
+    setGeneratingVideo(false);
+  }
+
   return (
     <main className="min-h-screen bg-[#0B0E1A] px-8 py-16 text-[#E9E6F2]">
       <div className="mx-auto max-w-2xl">
@@ -84,6 +103,28 @@ export default function PdfTutor() {
             <div className="border-b border-[#262B47] px-5 py-3 text-sm font-semibold">
               📄 {fileName}
             </div>
+
+            <div className="flex items-center gap-2 border-b border-[#262B47] px-5 py-3">
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="rounded-lg border border-[#262B47] bg-[#12162A] px-3 py-1.5 text-xs text-[#E9E6F2] outline-none"
+              >
+                <option value="en">English narration</option>
+                <option value="hi">Hindi narration</option>
+              </select>
+              <button
+                onClick={generateVideo}
+                disabled={generatingVideo}
+                className="rounded-lg bg-[#6C63FF] px-4 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+              >
+                {generatingVideo ? "Generating video... (~1-2 min)" : "🎬 Generate Narrated Video"}
+              </button>
+            </div>
+            {videoStatus && (
+              <p className="border-b border-[#262B47] px-5 py-2 text-xs text-[#7EE787]">{videoStatus}</p>
+            )}
+
             <div className="flex flex-col gap-3 p-4">
               {messages.map((msg, i) => (
                 <div
